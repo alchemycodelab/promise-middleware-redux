@@ -6,13 +6,25 @@ export const PENDING = 'PENDING';
 export const FULFILLED = 'FULFILLED';
 export const REJECTED = 'REJECTED';
 
-export const createAction = (type, promise) => ({
-  type,
-  payload: promise,
-  pendingType: `${type}_${PENDING}`,
-  fulfilledType: `${type}_${FULFILLED}`,
-  rejectedType: `${type}_${REJECTED}`
-});
+export const createAction = (type, promiseFn) => {
+  const pendingType = `${type}_${PENDING}`;
+  const fulfilledType = `${type}_${FULFILLED}`;
+  const rejectedType = `${type}_${REJECTED}`;
+
+  return [
+    (...args) => ({
+      type,
+      payload: promiseFn(...args),
+      pendingType,
+      fulfilledType,
+      rejectedType
+    }),
+    type,
+    pendingType,
+    fulfilledType,
+    rejectedType
+  ]
+};
 
 export const promiseMiddleware = ({ dispatch }) => next => action => {
   const {
