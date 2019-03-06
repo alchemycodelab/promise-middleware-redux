@@ -1,5 +1,5 @@
 {
-  "name": "redux-promise-middleware",
+  "name": "promise-middleware-redux",
   "version": "1.0.0",
   "description": "",
   "main": "lib/index.js",
