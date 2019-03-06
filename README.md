@@ -9,6 +9,16 @@ export const fetchFacts = () => ({
 });
 ```
 
+```js
+export const fetchFacts = () => ({
+  type: 'FETCH_FACTS',
+  pendingType: 'FETCH_FACTS_LOADING',
+  fulfilledType: 'FETCH_FACTS_DONE',
+  rejectedType: 'FETCH_FACTS_ERROR',
+  payload: getFacts()
+});
+```
+
 ### Action Creator
 
 ```js
