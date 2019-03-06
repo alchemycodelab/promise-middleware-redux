@@ -1,9 +1,10 @@
 {
   "name": "promise-middleware-redux",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
+    "prepublish": "npm run build",
     "test": "jest --verbose",
     "test:watch": "npm run test -- --watch",
     "build": "babel src/index.js --out-dir lib --source-maps"
