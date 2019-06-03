@@ -31,7 +31,8 @@ export const promiseMiddleware = ({ dispatch }) => next => action => {
     type,
     pendingType = PENDING,
     fulfilledType = FULFILLED,
-    rejectedType = REJECTED
+    rejectedType = REJECTED,
+    ...rest
   } = action;
 
   if (!isPromise(action.payload)) {
@@ -43,7 +44,8 @@ export const promiseMiddleware = ({ dispatch }) => next => action => {
   action.payload.then(payload => {
     dispatch({
       type,
-      payload
+      payload,
+      ...rest
     });
 
     dispatch({ type: fulfilledType });
