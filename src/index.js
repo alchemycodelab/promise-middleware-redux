@@ -2,11 +2,20 @@ export const isPromise = payload => {
   return Promise.resolve(payload) === payload;
 };
 
+export const isValid = action => {
+  return typeof action === 'object' &&
+    action.hasOwnProperty('type') &&
+    isPromise(action.payload)
+}
+
 export const PENDING = 'PENDING';
 export const FULFILLED = 'FULFILLED';
 export const REJECTED = 'REJECTED';
 
 export const createAction = (type, promiseFn) => {
+  if (typeof promiseFn !== 'function') {
+    throw `The second argument to createAction must be a function. Received '${typeof promiseFn}'`
+  }
   const pendingType = `${type}_${PENDING}`;
   const fulfilledType = `${type}_${FULFILLED}`;
   const rejectedType = `${type}_${REJECTED}`;
@@ -27,23 +36,25 @@ export const createAction = (type, promiseFn) => {
 };
 
 export const promiseMiddleware = ({ dispatch }) => next => action => {
+  if (!isValid(action)) {
+    return next(action);
+  }
   const {
     type,
     pendingType = PENDING,
     fulfilledType = FULFILLED,
-    rejectedType = REJECTED
+    rejectedType = REJECTED,
+    payload,
+    ...rest
   } = action;
-
-  if (!isPromise(action.payload)) {
-    return next(action);
-  }
 
   dispatch({ type: pendingType });
 
-  action.payload.then(payload => {
+  payload.then(payload => {
     dispatch({
       type,
-      payload
+      payload,
+      ...rest
     });
 
     dispatch({ type: fulfilledType });
